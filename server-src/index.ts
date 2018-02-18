@@ -1,7 +1,11 @@
+const moduleAlias: any = require('module-alias');
+
 import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as bodyParser from 'body-parser';
+
+moduleAlias.addAlias('@actions', path.resolve('./dist-server/server-src/actions/'));
 
 import { createStore } from 'redux';
 

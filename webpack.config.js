@@ -10,7 +10,10 @@ module.exports = {
   },
   devtool: "source-map",
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json"],
+    alias: {
+      "@actions": path.resolve(__dirname, 'src/actions')
+    }
   },
   module: {
     rules: [

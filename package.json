@@ -20,6 +20,7 @@
     "@types/react-dom": "^16.0.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "module-alias": "^2.0.6",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",

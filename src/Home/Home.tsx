@@ -1,5 +1,8 @@
 import * as  React from 'react';
 import { connect } from 'react-redux';
+import { loadItems } from '@actions/test';
+
+console.log(loadItems.toString());
 
 const mapStateToProps = (state: any) => {
   return {
@@ -16,10 +19,6 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 class Home extends React.Component<any, any> {
-
-  componentWillMount() {
-    this.props.fetch();
-  }
 
   render() {
     return <h1>{this.props.counter}</h1>;

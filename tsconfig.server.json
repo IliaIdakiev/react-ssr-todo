@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "./dist-server/",
     "baseUrl": ".",
+    "outDir": "./dist-server/",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
@@ -10,7 +10,12 @@
     "lib": [
       "dom",
       "es2017"
-    ]
+    ],
+    "paths": {
+      "@actions/*": [
+        "server-src/actions/*"
+      ]
+    }
   },
   "files": [
     "./server-src/index.ts"
