@@ -9,11 +9,22 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceFolder}/server-src/index.ts",
+      "outFiles": [
+        "${workspaceFolder}/dist-server/**/*.js"
+      ],
+      "internalConsoleOptions": "openOnSessionStart",
+      "sourceMaps": true,
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build & Launch Program",
+      "program": "${workspaceFolder}/server-src/index.ts",
       "preLaunchTask": "BUILD",
       "outFiles": [
         "${workspaceFolder}/dist-server/**/*.js"
       ],
-      "internalConsoleOptions": "openOnFirstSessionStart",
+      "internalConsoleOptions": "openOnSessionStart",
       "sourceMaps": true,
     }
   ]

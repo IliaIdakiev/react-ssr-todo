@@ -1,0 +1,5 @@
+export type LOAD_TODOS = 'LOAD_TODOS';
+export const LOAD_TODOS: LOAD_TODOS = 'LOAD_TODOS';
+
+export type UPDATE_TODO = 'UPDATE_TODO';
+export const UPDATE_TODO: UPDATE_TODO = 'UPDATE_TODO';

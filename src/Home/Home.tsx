@@ -1,27 +1,53 @@
 import * as  React from 'react';
-import { connect } from 'react-redux';
-import { loadItems } from '@actions/test';
 
-console.log(loadItems.toString());
+import './Home.css';
 
-const mapStateToProps = (state: any) => {
-  return {
-    counter: state.counter
-  }
+import { bindActionCreators } from 'redux';
+import { connect, Dispatch } from 'react-redux';
+import { loadTodosAsync, updateTodoAsync } from '../actions/async';
+
+import { AppState } from '../interfaces/app-state';
+import { Todo } from '../interfaces/todo';
+
+const mapStateToProps = (state: AppState) => ({
+  todos: state.todos
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => bindActionCreators({
+  loadTodosAsync,
+  updateTodoAsync
+}, dispatch);
+
+interface HomeComponent {
+  todos: Todo[];
+  loadTodosAsync: (force?: boolean) => any;
+  updateTodoAsync: (todo: Todo) => any;
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    fetch: () => {
-      dispatch({ type: 'FETCH', payload: '' });
-    }
-  }
-}
+class Home extends React.Component<HomeComponent, any> {
 
-class Home extends React.Component<any, any> {
+  componentDidMount() {
+    this.props.loadTodosAsync();
+  }
+
+  completedHandler = (event: any) => {
+    const id = event.target.getAttribute('data-id');
+    const todo = this.props.todos.find(todo => todo.id === +id);
+    todo.completed = !todo.completed;
+    this.props.updateTodoAsync(todo);
+  };
 
   render() {
-    return <h1>{this.props.counter}</h1>;
+    return (
+      <div id="todo-list">
+        <h1>Todo List</h1>
+        <ul>
+          {this.props.todos.map((todo: Todo, index: number) =>
+            <li onClick={this.completedHandler} key={index} data-completed={todo.completed} data-id={todo.id}>{todo.text}</li>
+          )}
+        </ul>
+      </div>
+    );
   }
 }
 

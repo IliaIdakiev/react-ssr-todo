@@ -6,7 +6,7 @@
   "scripts": {
     "build:react": "./node_modules/.bin/webpack",
     "build:server": "./node_modules/.bin/tsc -p ./tsconfig.server.json",
-    "build:all": "yarn build:react && yarn build:server",
+    "build:all": "yarn build:react && yarn build:server && gulp copy-css",
     "start": "yarn build:all && node ./dist-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,6 +36,10 @@
     "@types/react-router-dom": "^4.2.4",
     "@types/redux": "^3.6.0",
     "awesome-typescript-loader": "^3.4.1",
+    "css-loader": "^0.28.9",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "gulp": "^3.9.1",
+    "gulp-replace": "^0.6.1",
     "html-webpack-plugin": "^2.30.1",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.20.1",
