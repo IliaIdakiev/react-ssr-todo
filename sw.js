@@ -33,6 +33,10 @@ const store = {
   getAll: async () => {
     const tx = this.db.transaction('todos').objectStore('todos');
     return tx.getAll();
+  },
+  deleteDB: async function (name) {
+    this.initialized = false;
+    return idb.delete(name);
   }
 }
 
@@ -50,6 +54,7 @@ addEventListener('install', event => {
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll(REQUIRED_FILES);
 
+    await store.deleteDB(DB_NAME);
     await store.init();
     await syncTodos();
   })());
@@ -62,7 +67,8 @@ addEventListener('activate', event => {
       if (key !== CACHE_NAME) await caches.delete(key);
     }
 
-    await clients.claim();
+    const allClients = await clients.matchAll({ includeUncontrolled: true });
+    clients.claim();
   })());
 });
 
@@ -73,7 +79,7 @@ addEventListener('fetch', event => {
   event.respondWith((async () => {
     let response, path;
     try {
-      path = request.url.replace(request.referrer, '/');
+      path = request.url.replace('http://localhost:3000/', '/');
       if (REQUIRED_FILES.indexOf(path) !== -1) {
         response = await caches.match(path, { cacheName: CACHE_NAME });
         if (response) { response = response.clone(); }
@@ -81,7 +87,12 @@ addEventListener('fetch', event => {
       if (!response) {
         if (request.url.indexOf('/api/posts') && request.method === 'POST') {
           const requestClone = await request.clone();
-          const todos = await requestClone.json();
+          let todos = await requestClone.json();
+          todos = Array.isArray(todos) ? todos : [todos];
+          todos.map(todo => {
+            todo.id = +todo.id;
+            todo.completed = !!todo.completed;
+          });
           await store.delete(todos);
           await store.add(todos);
         }
@@ -93,9 +104,11 @@ addEventListener('fetch', event => {
         if (response) {
           response = response.clone({ url: request.url });
         }
-      } else if (path === '/api/todos') {
-        const todos = await store.getAll();
-        response = new Response(JSON.stringify(todos), {
+      } else if (path.indexOf('/api/todos') !== -1) {
+        const [, id] = (/\?id=(\d+)$/.exec(path) || [, null]);
+        let result = await store.getAll();
+        if (id) result = result.find(todo => todo.id === +id);
+        response = new Response(JSON.stringify(result), {
           url: request.url,
           headers: {
             'content-type': 'application/json'
