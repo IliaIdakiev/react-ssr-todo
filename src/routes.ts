@@ -1,6 +1,7 @@
 import Home from './Home/Home';
 import About from './About/About';
 import NotFound from './NotFound';
+import Update from './Update/Update';
 
 const routes: any[] = [
   {
@@ -13,8 +14,18 @@ const routes: any[] = [
     component: About
   },
   {
+    path: '/edit/:id',
+    component: Update
+  },
+  {
+    path: '/add',
+    component: Update
+  },
+  {
     component: NotFound
   }
 ];
 
-export { routes };
+const paths = routes.map(r => r.path);
+
+export { routes, paths };

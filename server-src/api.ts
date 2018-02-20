@@ -5,7 +5,9 @@ import { Todo } from '../src/interfaces/todo';
 const api = Router();
 
 api.get('/todos', (req, res) => {
-  res.send(db.getTodos()).end();
+  const id = +req.query.id;
+  const todos = db.getTodos();
+  res.send(id ? todos.find(todo => todo.id === id) : todos).end();
 });
 
 api.post('/todos', (req, res) => {

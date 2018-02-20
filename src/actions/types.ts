@@ -3,3 +3,9 @@ export const LOAD_TODOS: LOAD_TODOS = 'LOAD_TODOS';
 
 export type UPDATE_TODO = 'UPDATE_TODO';
 export const UPDATE_TODO: UPDATE_TODO = 'UPDATE_TODO';
+
+export type SELECT_TODO = 'SELECT_TODO';
+export const SELECT_TODO: SELECT_TODO = 'SELECT_TODO';
+
+export type CLEAR_LOADED = 'CLEAR_LOADED';
+export const CLEAR_LOADED: CLEAR_LOADED = 'CLEAR_LOADED';
