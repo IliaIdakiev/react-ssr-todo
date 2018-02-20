@@ -61,6 +61,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(distPath));
+app.use('/img', express.static('./public'));
 
 app.get('/sw.js', (req, res) => {
   res.sendFile(path.resolve('./sw.js'));

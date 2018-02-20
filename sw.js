@@ -6,7 +6,7 @@ const DB_NAME = 'react-pwa-v1';
 const store = {
   init: async () => {
     this.db = await idb.open(DB_NAME, 1, upgradeDB => {
-      upgradeDB.createObjectStore('todos', { keyPath: 'id' });
+      upgradeDB.createObjectStore('todos', { keyPath: 'id', autoIncrement: true });
     });
   },
   add: async (entities) => {
@@ -15,6 +15,7 @@ const store = {
     const objectStore = tx.objectStore('todos');
 
     for (let entity of entities) {
+      if (entity.id === -1) delete entity.id;
       await objectStore.put(entity);
     }
 
@@ -44,7 +45,8 @@ const REQUIRED_FILES = [
   '/bundle.js',
   '/styles.bundle.css',
   '/favicon.ico',
-  '/app-shell'
+  '/app-shell',
+  '/img/about.jpg'
   // 'manifest.json'
 ];
 
