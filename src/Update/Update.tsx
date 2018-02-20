@@ -33,11 +33,14 @@ class Update extends React.Component<any, any> {
   }
 
   save = (event: any) => {
+    event.preventDefault();
+
     const updatedTodo = {
-      id: (this.props.todo || { id: -1 }).id,
+      id: (this.refs.id as HTMLInputElement).value,
       text: (this.refs.text as HTMLInputElement).value,
       completed: (this.refs.completed as HTMLInputElement).checked
     }
+
     this.props.saveTodo(updatedTodo).then(() => this.props.history.push('/'));
   }
 
@@ -54,16 +57,19 @@ class Update extends React.Component<any, any> {
     return (
       <div>
         <h1>Update</h1>
-        <div>
-          <label>Text</label>
-          <input type="text" defaultValue={todo.text} ref="text" />
-        </div>
-        <div>
-          <label>Completed</label>
-          <input type="checkbox" defaultChecked={todo.completed} ref="completed" />
-        </div>
+        <form method="post" action="/api/todos?redirect=/">
+          <input type="hidden" defaultValue={todo.id} ref="id" name="id" />
+          <div>
+            <label>Text</label>
+            <input type="text" defaultValue={todo.text} ref="text" name="text" />
+          </div>
+          <div>
+            <label>Completed</label>
+            <input type="checkbox" defaultChecked={todo.completed} ref="completed" name="completed" />
+          </div>
 
-        {!this.props.waiting ? <button onClick={this.save}>Save</button> : <span>Saving...</span>}
+          {!this.props.waiting ? <button onClick={this.save}>Save</button> : <span>Saving...</span>}
+        </form>
       </div>
     );
   }

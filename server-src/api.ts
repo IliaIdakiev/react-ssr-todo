@@ -12,12 +12,15 @@ api.get('/todos', (req, res) => {
 });
 
 api.post('/todos', (req, res) => {
+  const redirect = req.query.redirect;
   const updated: Todo = {
     id: +req.body.id,
     text: req.body.text,
     completed: !!req.body.completed
   };
+
   let task = null;
+
   if (updated.id !== -1) {
     task = db.getTodos()
       .then((todos: Todo[]) => todos.map(todo => todo.id === updated.id ? updated : todo))
@@ -25,7 +28,14 @@ api.post('/todos', (req, res) => {
   } else {
     task = db.addTodo(updated);
   }
-  task.then(data => res.send(data));
+
+  task.then(data => {
+    if (redirect) {
+      res.redirect(redirect);
+      return;
+    }
+    res.send(data);
+  });
 });
 
 export default api;
