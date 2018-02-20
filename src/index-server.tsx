@@ -4,6 +4,7 @@ import { StaticRouter } from 'react-router';
 import { Provider } from 'react-redux';
 
 import App from './App';
+import AppShell from './AppShell';
 
 export interface RenderProps {
   url: string;
@@ -11,13 +12,21 @@ export interface RenderProps {
   context?: any;
 }
 
-export default function renderRact(config: RenderProps) {
+export default function renderRact(config: RenderProps, isShell = false) {
 
-  return ReactDomServer.renderToString(
+  if (!isShell) return ReactDomServer.renderToString(
     <StaticRouter location={config.url} context={config.context || {}}>
       <Provider store={config.store}>
         <App />
       </Provider>
     </StaticRouter>
   );
+
+  return ReactDomServer.renderToString(
+    <StaticRouter location={config.url} context={config.context || {}}>
+      <Provider store={config.store}>
+        <AppShell />
+      </Provider>
+    </StaticRouter>
+  );;
 };
