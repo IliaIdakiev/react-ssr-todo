@@ -1,11 +1,11 @@
-const moduleAlias: any = require('module-alias');
+// const moduleAlias: any = require('module-alias');
 
 import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as bodyParser from 'body-parser';
 
-moduleAlias.addAlias('@actions', path.resolve('./dist-server/server-src/actions/'));
+// moduleAlias.addAlias('@actions', path.resolve('./dist-server/server-src/actions/'));
 
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
@@ -31,7 +31,6 @@ const bundles = fs.readdirSync(distPath).reduce((acc, bundle) => {
 
 function renderIndex(html: string, store: Store<AppState>) {
   const state = store.getState();
-  state.loaded = true;
   return `
     <!doctype html>
     <html>
