@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { createStore, applyMiddleware, compose } from 'redux';
 
 import App from './App';
+import { reducer } from './reducers';
 
 const win: any = window;
 
@@ -17,12 +18,7 @@ const enhancer: any = compose(applyMiddleware(thunk), devTools);
 const preloadedState = win.__PRELOADED_STATE__;
 delete win.__PRELOADED_STATE__;
 
-const store = createStore(function reducer(state = { counter: 0 }, action: any) {
-  if (action.type === 'FETCH') {
-    console.log('Fetch!');
-  }
-  return state;
-}, preloadedState, enhancer);
+const store = createStore(reducer, preloadedState, enhancer);
 
 ReactDOM.hydrate(
   <BrowserRouter>

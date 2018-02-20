@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
@@ -9,7 +10,12 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@actions/*": [
+        "src/actions/*"
+      ]
+    }
   },
   "include": [
     "./src/**/*"
