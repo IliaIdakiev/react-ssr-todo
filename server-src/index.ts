@@ -25,7 +25,7 @@ const bundles = fs.readdirSync(distPath).reduce((acc, bundle) => {
   return acc.concat(type === 'js' ? `<script defer src="/${name}"></script>` : `<link href="/${name}" rel="stylesheet"/>`);
 }, []);
 
-function renderIndex(html: string, store: Store<AppState>) {
+function renderIndex(html: string, store: Store<AppState>, withSW = true) {
   const state = store.getState();
   return `
     <!doctype html>
@@ -36,6 +36,17 @@ function renderIndex(html: string, store: Store<AppState>) {
           window.__PRELOADED_STATE__ = ${JSON.stringify(state).replace(/</g, '\\u003c')}
         </script>
         ${bundles.join('\n')}
+        ${withSW ? `<script>
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+              console.log('Service worker registration succeeded:', registration);
+            }).catch(function(error) {
+              console.log('Service worker registration failed:', error);
+            });
+          } else {
+            console.log('Service workers are not supported.');
+          }
+        </script>` : ''}
       </head>
       <body>
         <div id="app">${html}</div>
@@ -50,6 +61,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(distPath));
+
+app.get('/sw.js', (req, res) => {
+  res.sendFile(path.resolve('./sw.js'));
+});
+
+app.get('/app-shell', (req, res) => {
+  const store = createStore<AppState>(reducer, undefined, applyMiddleware(thunk));
+  const reactAppShellHtml = buildReactHtml({ url: '/', store }, true);
+  res.send(renderIndex(reactAppShellHtml, store, false));
+});
+
+app.get('/idb.js', (req, res) => {
+  res.sendFile(path.resolve('./node_modules/idb/lib/idb.js'));
+});
 
 app.use('/api', api);
 
