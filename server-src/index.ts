@@ -4,6 +4,8 @@ import * as fs from 'fs';
 import * as bodyParser from 'body-parser';
 
 import thunk from 'redux-thunk';
+
+import { Store } from 'redux';
 import { createStore, applyMiddleware } from 'redux';
 import { matchPath } from 'react-router-dom';
 
@@ -14,7 +16,6 @@ import { reducer } from '../src/reducers';
 import { pathResolvers } from './resolvers';
 import { routes, paths } from '../src/routes';
 import { AppState } from '../src/interfaces/app-state';
-import { Store } from 'redux';
 
 const mainDirPath = process.cwd();
 const distPath = path.join(mainDirPath, 'dist');
@@ -61,6 +62,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(distPath));
+app.use('/img', express.static('./public'));
 
 app.get('/sw.js', (req, res) => {
   res.sendFile(path.resolve('./sw.js'));
