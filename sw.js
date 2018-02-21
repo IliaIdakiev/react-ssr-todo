@@ -69,8 +69,7 @@ addEventListener('activate', event => {
       if (key !== CACHE_NAME) await caches.delete(key);
     }
 
-    const allClients = await clients.matchAll({ includeUncontrolled: true });
-    clients.claim();
+    await clients.claim();
   })());
 });
 
